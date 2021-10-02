@@ -5,8 +5,6 @@ import com.joe.businesshouse.visitor.CellVisitor;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.util.Objects.isNull;
-
 public class Hotel implements Cell {
     private final int id;
     private HotelType hotelType = HotelType.silver;
@@ -31,14 +29,6 @@ public class Hotel implements Cell {
 
     public int getHotelRent() {
         return hotelType.getRent();
-    }
-
-    public boolean isNew() {
-        return isNull(owner);
-    }
-
-    public boolean isSameOwner(User otherUser) {
-        return otherUser.equals(owner);
     }
 
     public void setOwner(User owner) {

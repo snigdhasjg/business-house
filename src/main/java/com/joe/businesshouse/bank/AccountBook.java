@@ -4,6 +4,11 @@ public class AccountBook {
     private int liquidCash;
     private int assetValue;
 
+    public AccountBook(int openingAmount) {
+        this.liquidCash = openingAmount;
+        this.assetValue = 0;
+    }
+
     public int totalValue() {
         return liquidCash + assetValue;
     }
