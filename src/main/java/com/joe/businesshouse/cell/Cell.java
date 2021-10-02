@@ -1,25 +1,9 @@
 package com.joe.businesshouse.cell;
 
-import com.joe.businesshouse.bank.Bank;
 import com.joe.businesshouse.game.User;
+import com.joe.businesshouse.visitor.CellVisitor;
 
-public abstract class Cell {
-    private final int id;
-    private final Bank bank;
+public interface Cell {
 
-    public Cell(int id, Bank bank) {
-        this.id = id;
-        this.bank = bank;
-    }
-
-    protected Bank getBank() {
-        return bank;
-    }
-
-    public abstract void visit(User user);
-
-    @Override
-    public String toString() {
-        return String.format("%s(%d)", this.getClass().getSimpleName(), id);
-    }
+    void accept(User user, CellVisitor cellVisitor);
 }

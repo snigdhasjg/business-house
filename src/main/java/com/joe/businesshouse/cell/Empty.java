@@ -1,16 +1,23 @@
 package com.joe.businesshouse.cell;
 
-import com.joe.businesshouse.bank.Bank;
 import com.joe.businesshouse.game.User;
+import com.joe.businesshouse.visitor.CellVisitor;
 
-public class Empty extends Cell {
+public class Empty implements Cell {
 
-    public Empty(int id, Bank bank) {
-        super(id,bank);
+    private final int id;
+
+    public Empty(int id) {
+        this.id = id;
     }
 
     @Override
-    public void visit(User user) {
-        // No action
+    public void accept(User user, CellVisitor cellVisitor) {
+        cellVisitor.visit(user, this);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Empty(%d)", id);
     }
 }

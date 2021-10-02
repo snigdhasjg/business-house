@@ -6,6 +6,8 @@ import com.joe.businesshouse.cell.Empty;
 import com.joe.businesshouse.cell.Hotel;
 import com.joe.businesshouse.cell.Jail;
 import com.joe.businesshouse.cell.Lottery;
+import com.joe.businesshouse.visitor.BankCellVisitor;
+import com.joe.businesshouse.visitor.CellVisitor;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,13 +34,14 @@ public class GameSetup {
     }
 
     public void startGame() {
+        CellVisitor cellVisitor = new BankCellVisitor(bank);
         System.out.println(bank);
         for (int each : listOfDiceInput) {
             User user = users.get(currentPayer);
 
             int boardIndex = (user.getBoardIdx() + each) % board.size();
             Cell cell = board.get(boardIndex);
-            cell.visit(user);
+            cell.accept(user, cellVisitor);
             user.setBoardIdx(boardIndex);
 
             System.out.printf("%s visited by %s\n", cell, user);
@@ -49,7 +52,7 @@ public class GameSetup {
     }
 
     public User getWinner() {
-        return bank.userThatHasMaximumAmount();
+        return bank.richestPlayer();
     }
 
     private List<Integer> getListOfDiceInput(String diceDiagram) {
@@ -62,10 +65,10 @@ public class GameSetup {
         AtomicInteger i = new AtomicInteger(1);
 
         Map<String, Supplier<Cell>> cellMap = new HashMap<>();
-        cellMap.put("J", () -> new Jail(i.getAndIncrement(), bank));
-        cellMap.put("L", () -> new Lottery(i.getAndIncrement(), bank));
-        cellMap.put("H", () -> new Hotel(i.getAndIncrement(), bank));
-        cellMap.put("E", () -> new Empty(i.getAndIncrement(), bank));
+        cellMap.put("J", () -> new Jail(i.getAndIncrement()));
+        cellMap.put("L", () -> new Lottery(i.getAndIncrement()));
+        cellMap.put("H", () -> new Hotel(i.getAndIncrement()));
+        cellMap.put("E", () -> new Empty(i.getAndIncrement()));
 
         return Arrays.stream(cellDiagram.split(","))
                 .map(e -> cellMap.get(e.strip()).get())

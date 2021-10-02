@@ -1,43 +1,61 @@
 package com.joe.businesshouse.cell;
 
-import com.joe.businesshouse.bank.Bank;
 import com.joe.businesshouse.game.User;
+import com.joe.businesshouse.visitor.CellVisitor;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.util.Objects.isNull;
 
-public class Hotel extends Cell {
+public class Hotel implements Cell {
+    private final int id;
     private HotelType hotelType = HotelType.silver;
     private User owner = null;
 
-    public Hotel(int id, Bank bank) {
-        super(id, bank);
+    public Hotel(int id) {
+        this.id = id;
     }
 
     @Override
-    public void visit(User user) {
-        if (isNull(owner)) {
-            owner = user;
-            getBank().buyAsset(user, hotelType.getValue());
-            return;
-        }
-        if (owner.equals(user)) {
-            int preUpgradeValue = hotelType.getValue();
-            if (upgrade()) {
-                getBank().buyAsset(user, hotelType.getValue() - preUpgradeValue);
-            }
-            return;
-        }
-        getBank().transferMoney(user, owner, hotelType.getRent());
+    public void accept(User user, CellVisitor cellVisitor) {
+        cellVisitor.visit(user, this);
     }
 
-    private boolean upgrade() {
-        if (hotelType.equals(HotelType.silver)) {
-            hotelType = HotelType.gold;
-            return true;
-        } else if (hotelType.equals(HotelType.gold)) {
-            hotelType = HotelType.platinum;
-            return true;
-        }
-        return false;
+    public User getOwner() {
+        return owner;
+    }
+
+    public int getHotelValue() {
+        return hotelType.getValue();
+    }
+
+    public int getHotelRent() {
+        return hotelType.getRent();
+    }
+
+    public boolean isNew() {
+        return isNull(owner);
+    }
+
+    public boolean isSameOwner(User otherUser) {
+        return otherUser.equals(owner);
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public boolean upgrade() {
+        AtomicBoolean isUpgradable = new AtomicBoolean(false);
+        hotelType.next().ifPresent(e -> {
+            hotelType = e;
+            isUpgradable.set(true);
+        });
+        return isUpgradable.get();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s Hotel(%d)", hotelType, id);
     }
 }

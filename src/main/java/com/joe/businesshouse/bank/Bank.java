@@ -55,7 +55,7 @@ public class Bank {
         accountBookOfTo.addLiquidCash(amount);
     }
 
-    public User userThatHasMaximumAmount() {
+    public User richestPlayer() {
         return userDB.entrySet()
                 .stream()
                 .max(Comparator.comparingInt(o -> o.getValue().totalValue()))
