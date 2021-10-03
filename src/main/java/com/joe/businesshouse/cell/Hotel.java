@@ -1,7 +1,7 @@
 package com.joe.businesshouse.cell;
 
 import com.joe.businesshouse.game.User;
-import com.joe.businesshouse.visitor.CellVisitor;
+import com.joe.businesshouse.visitor.UserCellVisitor;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -15,8 +15,8 @@ public class Hotel implements Cell {
     }
 
     @Override
-    public void accept(User user, CellVisitor cellVisitor) {
-        cellVisitor.visit(user, this);
+    public void accept(User user, UserCellVisitor userCellVisitor) {
+        userCellVisitor.visit(user, this);
     }
 
     public User getOwner() {

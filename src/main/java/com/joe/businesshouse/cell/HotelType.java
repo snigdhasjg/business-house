@@ -19,7 +19,7 @@ public enum HotelType {
         switch (this) {
             case silver:
                 return Optional.of(gold);
-            case platinum:
+            case gold:
                 return Optional.of(platinum);
             default:
                 return Optional.empty();

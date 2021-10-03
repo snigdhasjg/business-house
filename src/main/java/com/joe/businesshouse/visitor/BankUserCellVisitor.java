@@ -1,6 +1,7 @@
 package com.joe.businesshouse.visitor;
 
 import com.joe.businesshouse.bank.Bank;
+import com.joe.businesshouse.cell.Cell;
 import com.joe.businesshouse.cell.Empty;
 import com.joe.businesshouse.cell.Hotel;
 import com.joe.businesshouse.cell.Jail;
@@ -10,16 +11,17 @@ import com.joe.businesshouse.game.User;
 
 import static java.util.Objects.isNull;
 
-public class BankCellVisitor implements CellVisitor {
+public class BankUserCellVisitor implements UserCellVisitor {
     private final Bank bank;
 
-    public BankCellVisitor(Bank bank) {
+    public BankUserCellVisitor(Bank bank) {
         this.bank = bank;
     }
 
     @Override
     public void visit(User user, Empty empty) {
         // nothing happens here
+        logVisit(user, empty);
     }
 
     @Override
@@ -36,6 +38,7 @@ public class BankCellVisitor implements CellVisitor {
             } else {
                 bank.transferMoney(user, hotel.getOwner(), hotel.getHotelRent());
             }
+            logVisit(user, hotel);
         } catch (UserNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -45,6 +48,7 @@ public class BankCellVisitor implements CellVisitor {
     public void visit(User user, Jail jail) {
         try {
             bank.transferMoney(user, -jail.getFineAmount());
+            logVisit(user, jail);
         } catch (UserNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -54,8 +58,14 @@ public class BankCellVisitor implements CellVisitor {
     public void visit(User user, Lottery lottery) {
         try {
             bank.transferMoney(user, lottery.getPrizeMoney());
+            logVisit(user, lottery);
         } catch (UserNotFoundException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void logVisit(User user, Cell cell) {
+        System.out.printf("%s visited by %s\n", cell, user);
+        System.out.println(bank);
     }
 }

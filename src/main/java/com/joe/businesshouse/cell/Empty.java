@@ -1,7 +1,7 @@
 package com.joe.businesshouse.cell;
 
 import com.joe.businesshouse.game.User;
-import com.joe.businesshouse.visitor.CellVisitor;
+import com.joe.businesshouse.visitor.UserCellVisitor;
 
 public class Empty implements Cell {
 
@@ -12,8 +12,8 @@ public class Empty implements Cell {
     }
 
     @Override
-    public void accept(User user, CellVisitor cellVisitor) {
-        cellVisitor.visit(user, this);
+    public void accept(User user, UserCellVisitor userCellVisitor) {
+        userCellVisitor.visit(user, this);
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.joe.businesshouse.cell.Jail;
 import com.joe.businesshouse.cell.Lottery;
 import com.joe.businesshouse.game.User;
 
-public interface CellVisitor {
+public interface UserCellVisitor {
     void visit(User user, Empty empty);
 
     void visit(User user, Hotel hotel);
